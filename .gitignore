@@ -1,0 +1,8 @@
+# Compilados
+*.exe
+*.o
+*.out
+build/
+
+# Editor
+.vscode/
