@@ -125,8 +125,27 @@ void SistemaImpl::mostrarHistorial() {
     }
 }
 
-void SistemaImpl::buscarPaciente(string) {
-    // buscar el id en la cola y en los servicios y mostrar sus datos
+void SistemaImpl::buscarPaciente(string id) {
+    for (int i = 0; i < this->cola.getSize(); i++) {
+        Paciente* p = this->cola.get(i);
+        if (p->getId() == id) {
+            cout << endl << "Paciente en espera (posicion " << (i + 1) << "): " << p->resumen() << endl;
+            cout << "Servicio de destino: " << p->getServicio() << endl;
+            return;
+        }
+    }
+
+    for (int i = 0; i < this->servicios.getSize(); i++) {
+        Servicio* s = this->servicios.get(i);
+        Paciente* p = s->buscarPaciente(id);
+        if (p != nullptr) {
+            cout << endl << "Paciente atendido: " << p->resumen() << endl;
+            cout << "Departamento: " << s->getNombre() << endl;
+            return;
+        }
+    }
+
+    cout << "No se encontro ningun paciente con id " << id << endl;
 }
 
 SistemaImpl::~SistemaImpl() {

@@ -110,7 +110,10 @@ void menu(Sistema* sistema) {
         } else if (opcion == "3") {
             sistema->mostrarHistorial();
         } else if (opcion == "5") {
-            // pedir un id y llamar a sistema->buscarPaciente(id)
+            string id;
+            cout << "Ingrese el id del paciente: ";
+            cin >> id;
+            sistema->buscarPaciente(id);
         } else if (opcion != "4") {
             cout << "Opcion invalida" << endl;
         }
