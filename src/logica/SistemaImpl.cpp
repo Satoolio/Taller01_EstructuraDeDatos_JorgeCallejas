@@ -1,5 +1,6 @@
 #include "SistemaImpl.h"
 #include <iostream>
+#include <cctype>
 
 SistemaImpl::SistemaImpl() {
     this->nombres[0] = "Urgencias";
@@ -89,15 +90,39 @@ void SistemaImpl::atender(int cantidad) {
 }
 
 void SistemaImpl::mostrarServicios() {
-    // mostrar la lista numerada de los 8 servicios
+    cout << endl << "=== DEPARTAMENTOS/SERVICIOS ===" << endl;
+    for (int i = 0; i < this->servicios.getSize(); i++) {
+        cout << (i + 1) << ". " << this->servicios.get(i)->getNombre() << endl;
+    }
 }
 
-void SistemaImpl::mostrarServicio(int) {
-    // mostrar cuantos pacientes tiene el servicio numero y sus nombres con edad
+void SistemaImpl::mostrarServicio(int numero) {
+    if (numero < 1 || numero > this->servicios.getSize()) {
+        cout << "Departamento invalido" << endl;
+        return;
+    }
+
+    Servicio* s = this->servicios.get(numero - 1);
+    string titulo = s->getNombre();
+    for (char& c : titulo) c = toupper(c);
+
+    cout << endl << "=== ESTADO " << titulo << " ===" << endl;
+    cout << "Pacientes en el departamento de " << s->getNombre() << ": " << s->getCantidadPacientes() << endl;
+    for (int i = 0; i < s->getCantidadPacientes(); i++) {
+        Paciente* p = s->getPaciente(i);
+        cout << p->getNombre() << " (" << p->getEdad() << ")" << endl;
+    }
 }
 
 void SistemaImpl::mostrarHistorial() {
-    // mostrar las atenciones desde la ultima a la primera
+    cout << endl << "=== HISTORIAL DE ULTIMAS ATENCIONES DEL HOSPITAL ===" << endl << endl;
+    if (this->historial.isEmpty()) {
+        cout << "No hay atenciones registradas todavia." << endl;
+        return;
+    }
+    for (int i = 0; i < this->historial.getSize(); i++) {
+        cout << this->historial.get(i).resumen() << endl;
+    }
 }
 
 void SistemaImpl::buscarPaciente(string) {

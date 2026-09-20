@@ -99,7 +99,14 @@ void menu(Sistema* sistema) {
             }
         } else if (opcion == "2") {
             sistema->mostrarServicios();
-            // pedir cual ver y llamar a sistema->mostrarServicio(numero)
+            string numero;
+            cout << endl << "Seleccionar opcion: ";
+            cin >> numero;
+            if (esNumero(numero) && numero.size() <= 2) {
+                sistema->mostrarServicio(stoi(numero));
+            } else {
+                cout << "Opcion invalida" << endl;
+            }
         } else if (opcion == "3") {
             sistema->mostrarHistorial();
         } else if (opcion == "5") {
