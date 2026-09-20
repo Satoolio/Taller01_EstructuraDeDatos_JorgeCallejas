@@ -1,4 +1,5 @@
 #include "SistemaImpl.h"
+#include <iostream>
 
 SistemaImpl::SistemaImpl() {
     this->nombres[0] = "Urgencias";
@@ -36,12 +37,55 @@ void SistemaImpl::agregarPaciente(string id, string nombre, int edad, string ser
     this->cola.push(new Paciente(id, nombre, edad, servicio));
 }
 
-void SistemaImpl::mostrarCola() {
-    // mostrar los pacientes en espera con su numero, id y nombre
+int SistemaImpl::cantidadEnEspera() {
+    return this->cola.getSize();
 }
 
-void SistemaImpl::atender(int) {
-    // sacar cantidad pacientes de la cola, mandarlos a su servicio y guardar cada atencion en el historial
+Servicio* SistemaImpl::buscarServicio(string nombre) {
+    for (int i = 0; i < this->servicios.getSize(); i++) {
+        if (this->servicios.get(i)->getNombre() == nombre) return this->servicios.get(i);
+    }
+    return nullptr;
+}
+
+void SistemaImpl::mostrarCola() {
+    cout << endl << "=== PACIENTES EN ESPERA ===" << endl;
+    if (this->cola.isEmpty()) {
+        cout << "No hay pacientes en espera." << endl;
+        return;
+    }
+    for (int i = 0; i < this->cola.getSize(); i++) {
+        Paciente* p = this->cola.get(i);
+        cout << (i + 1) << ". " << p->getId() << " - " << p->getNombre() << endl;
+    }
+}
+
+void SistemaImpl::atender(int cantidad) {
+    if (this->cola.isEmpty()) {
+        cout << "No hay pacientes en espera." << endl;
+        return;
+    }
+    if (cantidad > this->cola.getSize()) {
+        cout << "Solo hay " << this->cola.getSize() << " pacientes en espera, se atenderan todos." << endl;
+        cantidad = this->cola.getSize();
+    }
+
+    cout << endl << "=== ATENDIENDO PACIENTES ===" << endl;
+    for (int i = 0; i < cantidad; i++) {
+        if (i > 0) cout << endl;
+        Paciente* p = this->cola.front();
+        this->cola.pop();
+
+        Servicio* s = this->buscarServicio(p->getServicio());
+        s->agregarPaciente(p);
+        this->historial.push(Atencion(p->getId(), p->getNombre(), p->getEdad(), s->getNombre()));
+
+        cout << "ID: " << p->getId() << endl;
+        cout << "Nombre: " << p->getNombre() << endl;
+        cout << "Edad: " << p->getEdad() << endl;
+        cout << "Servicio: " << p->getServicio() << endl << endl;
+        cout << "Paciente enviado a " << s->getNombre() << "." << endl;
+    }
 }
 
 void SistemaImpl::mostrarServicios() {

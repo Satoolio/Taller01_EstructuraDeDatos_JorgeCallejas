@@ -87,7 +87,16 @@ void menu(Sistema* sistema) {
 
         if (opcion == "1") {
             sistema->mostrarCola();
-            // pedir cuantos atender y llamar a sistema->atender(cantidad)
+            if (sistema->cantidadEnEspera() > 0) {
+                string cantidad;
+                cout << endl << "Indique la cantidad de pacientes a atender: ";
+                cin >> cantidad;
+                if (esNumero(cantidad) && cantidad.size() <= 4 && stoi(cantidad) > 0) {
+                    sistema->atender(stoi(cantidad));
+                } else {
+                    cout << "Cantidad invalida" << endl;
+                }
+            }
         } else if (opcion == "2") {
             sistema->mostrarServicios();
             // pedir cual ver y llamar a sistema->mostrarServicio(numero)

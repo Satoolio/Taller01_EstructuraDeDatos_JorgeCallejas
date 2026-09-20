@@ -15,12 +15,15 @@ private:
     List<Servicio*> servicios;
     Queue<Paciente*> cola;
     Stack<Atencion> historial;
+
+    Servicio* buscarServicio(string nombre);
 public:
     SistemaImpl();
 
     bool servicioValido(string nombre);
     bool existePaciente(string id);
     void agregarPaciente(string id, string nombre, int edad, string servicio);
+    int cantidadEnEspera();
 
     void mostrarCola();
     void atender(int cantidad);
